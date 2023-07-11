@@ -51,7 +51,6 @@ if input_text and uploaded_file:
     if check_csv(uploaded_file):
         df = pd.read_csv(uploaded_file)
         df = df_Transform.to_master_df(df, client)
-        df.to_csv("xxyyzz.csv")
     elif check_xlsx(uploaded_file):
         df = pd.read_excel(uploaded_file)
 
@@ -68,6 +67,7 @@ if input_text and uploaded_file:
         elif df["Loan Type"][i] == "Personal Loan":
             pl_vals.append(i)
 
+    print(resp)
     if (resp['entities']["Columns:Columns"])[0]['value'] == "cibil score":
         column_value = "Cibil Score"
 
@@ -123,7 +123,7 @@ if input_text and uploaded_file:
     st.text_area("Output", value=text)
 
 prompts = "1. calculate the average of emi amount of applicants with personal loan\n2. Calculate the average cibil score of " \
-          "applicants with home loans\n3. calculate the mean of account balance of applicants with auto loan\n4. get me the " \
+          "applicants with home loans\n3. get me the " \
           "average intrrest rate with home loans "
 
 
