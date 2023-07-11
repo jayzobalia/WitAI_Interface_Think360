@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
-import string, csv
 from wit import Wit
+import df_Transform
 
 client = Wit("DFYDQOB2CFXCQ4GUPIZETRHOR2NXLS2E")
 
@@ -45,9 +45,13 @@ with col2:
     st.header("Input File")
     uploaded_file = st.file_uploader("Choose a file")
 
+
+
 if input_text and uploaded_file:
     if check_csv(uploaded_file):
         df = pd.read_csv(uploaded_file)
+        df = df_Transform.to_master_df(uploaded_file, client)
+        df.to_csv("xxyyzz.csv")
     elif check_xlsx(uploaded_file):
         df = pd.read_excel(uploaded_file)
 
@@ -107,10 +111,36 @@ if input_text and uploaded_file:
     al_text = sum_al / len(al_vals)
 
     if hl_text > 0:
-        text = "The average " + column_value + " of applicants that have taken "+resp['entities']["loan_type:loan_type"][0]['value'] + " is: " + str(hl_text)
+        text = "The average " + column_value + " of applicants that have taken " + \
+               resp['entities']["loan_type:loan_type"][0]['value'] + " is: " + str(hl_text)
     elif pl_text > 0:
-        text = "The average " + column_value + " of applicants that have taken "+resp['entities']["loan_type:loan_type"][0]['value'] + " is: " + str(pl_text)
+        text = "The average " + column_value + " of applicants that have taken " + \
+               resp['entities']["loan_type:loan_type"][0]['value'] + " is: " + str(pl_text)
     elif al_text > 0:
-        text = "The average " + column_value + " of applicants that have taken "+resp['entities']["loan_type:loan_type"][0]['value'] + " is: " + str(al_text)
+        text = "The average " + column_value + " of applicants that have taken " + \
+               resp['entities']["loan_type:loan_type"][0]['value'] + " is: " + str(al_text)
 
     st.text_area("Output", value=text)
+
+prompts = "1. calculate the average of emi amount of applicants with personal loan\n2. Calculate the average cibil score of " \
+          "applicants with home loans\n3. calculate the mean of account balance of applicants with auto loan\n4. get me the " \
+          "average intrrest rate with home loans "
+
+
+st.text_area("Example Promots:", value=prompts)
+df = pd.read_csv("llm_sample_dataset.csv")
+
+@st.experimental_memo
+def convert_df(df):
+   return df.to_csv(index=False).encode('utf-8')
+
+
+csv = convert_df(df)
+
+st.download_button(
+   "Press to Download",
+   csv,
+   "file.csv",
+   "text/csv",
+   key='download-csv'
+)
