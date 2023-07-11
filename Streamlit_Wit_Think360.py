@@ -50,7 +50,7 @@ with col2:
 if input_text and uploaded_file:
     if check_csv(uploaded_file):
         df = pd.read_csv(uploaded_file)
-        df = df_Transform.to_master_df(uploaded_file, client)
+        df = df_Transform.to_master_df(df, client)
         df.to_csv("xxyyzz.csv")
     elif check_xlsx(uploaded_file):
         df = pd.read_excel(uploaded_file)
@@ -60,34 +60,34 @@ if input_text and uploaded_file:
     al_vals = []
     pl_vals = []
 
-    for i in range(len(df["loan_type"])):
-        if df["loan_type"][i] == "Home Loan":
+    for i in range(len(df["Loan Type"])):
+        if df["Loan Type"][i] == "Home Loan":
             hl_vals.append(i)
-        elif df["loan_type"][i] == "Auto Loan":
+        elif df["Loan Type"][i] == "Auto Loan":
             al_vals.append(i)
-        elif df["loan_type"][i] == "Personal Loan":
+        elif df["Loan Type"][i] == "Personal Loan":
             pl_vals.append(i)
 
     if (resp['entities']["Columns:Columns"])[0]['value'] == "cibil score":
-        column_value = "cibil_score"
+        column_value = "Cibil Score"
 
     elif (resp['entities']["Columns:Columns"])[0]['value'] == "loan amount":
-        column_value = "loan_amount"
+        column_value = "Loan Amount"
 
     elif (resp['entities']["Columns:Columns"])[0]['value'] == "interest rate":
-        column_value = "interest_rate"
+        column_value = "Interest Rate"
 
     elif (resp['entities']["Columns:Columns"])[0]['value'] == "EMI amount":
-        column_value = "emi_amount"
+        column_value = "EMI Amount"
 
     elif (resp['entities']["Columns:Columns"])[0]['value'] == "credit limit":
-        column_value = "credit_limit"
+        column_value = "Credit Limit"
 
     elif (resp['entities']["Columns:Columns"])[0]['value'] == "current balance":
-        column_value = "current_balance"
+        column_value = "Current Balance"
 
     elif (resp['entities']["Columns:Columns"])[0]['value'] == "high credit amount":
-        column_value = "high_credit_amount"
+        column_value = "High Credit Amount"
 
     sum_hl = 0
     sum_al = 0
@@ -130,7 +130,7 @@ prompts = "1. calculate the average of emi amount of applicants with personal lo
 st.text_area("Example Promots:", value=prompts)
 df = pd.read_csv("llm_sample_dataset.csv")
 
-@st.experimental_memo
+@st.cache_data
 def convert_df(df):
    return df.to_csv(index=False).encode('utf-8')
 

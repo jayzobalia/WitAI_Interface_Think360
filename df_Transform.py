@@ -19,7 +19,7 @@ def to_master_df(df,client):
     print(resp_list)
     columns = ['Applicant ID', 'Application Date', 'Age', 'Cibil Score', 'Loan Type', 'Loan Amount', 'Interest Rate', 'Date Open',
                'Date Close', 'EMI Amount', 'Credit Limit', 'Current Balance', 'dpd String', 'High Credit Amount', 'Postalcode']
-    new_df = pd.DataFrame(columns=columns, index=False)
+    new_df = pd.DataFrame(columns=columns)
 
     for i in resp_list:
         if i == "Application_ID":
