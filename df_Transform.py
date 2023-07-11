@@ -1,12 +1,4 @@
-import pandas as pd
-import string, csv
-from wit import Wit
-
-# client = Wit("DFYDQOB2CFXCQ4GUPIZETRHOR2NXLS2E")
-#
-# df = pd.read_csv("llm_sample_dataset.csv")
-
-def to_master_df(df,client):
+def to_master_df(df,client, pd):
     column_names = df.columns.tolist()
     resp_list = []
     for i in column_names:
